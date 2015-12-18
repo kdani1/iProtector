@@ -224,15 +224,25 @@ class Main extends PluginBase implements Listener {
     return true;
   }
 
-  public function onHurt(EntityDamageEvent $event) {
-    if($event->getEntity() instanceof Player) {
+    public function onHurt(EntityDamageEvent $event){
+            if($event->getEntity() instanceof Player){
       $p = $event->getEntity();
       $x = false;
       if(!$this->canGetHurt($p)) {
+       $event->setCancelled();
+}
+        if($event instanceof EntityDamageByEntityEvent){
+            if($event->getDamager() instanceof Player){
+      $p = $event->getDamager();
+      if(!$this->canGetHurt($p)) {
+        $mes = "§r§4You can't pvp here!";
+        $p->sendMessage($mes);
         $event->setCancelled();
+        }
       }
     }
   }
+}
 
   public function onBlockBreak(BlockBreakEvent $event) {
     $b = $event->getBlock();
